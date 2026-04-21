@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import PostCard from "@/components/PostCard";
 import FadeIn from "@/components/FadeIn";
 import { getAllPosts } from "@/lib/posts";

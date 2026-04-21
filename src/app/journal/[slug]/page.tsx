@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getPost, getAllSlugs } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
