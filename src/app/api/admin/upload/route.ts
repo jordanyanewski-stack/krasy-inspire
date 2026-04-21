@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifySessionToken } from '@/lib/auth'
-import path from 'path'
-import fs from 'fs'
+import { put } from '@vercel/blob'
 
 async function requireAuth() {
   const store = await cookies()
@@ -21,18 +20,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Няма файл' }, { status: 400 })
   }
 
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm']
+  const allowedTypes = [
+    'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+    'video/mp4', 'video/webm',
+  ]
   if (!allowedTypes.includes(file.type)) {
     return NextResponse.json({ error: 'Неподдържан тип файл' }, { status: 400 })
   }
 
   const ext = file.name.split('.').pop()?.toLowerCase() ?? 'bin'
-  const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-  const uploadsDir = path.join(process.cwd(), 'public/uploads')
-  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true })
+  const safeName = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
 
-  const buffer = Buffer.from(await file.arrayBuffer())
-  fs.writeFileSync(path.join(uploadsDir, safeName), buffer)
+  const blob = await put(safeName, file, { access: 'public' })
 
-  return NextResponse.json({ url: `/uploads/${safeName}` })
+  return NextResponse.json({ url: blob.url })
 }
