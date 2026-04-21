@@ -93,7 +93,7 @@ export default async function Home() {
 
         <div
           className="relative z-10 w-full max-w-4xl mx-auto px-6 flex flex-col items-center text-center gap-8"
-          style={{ paddingTop: "calc(22vh + var(--header-h))", paddingBottom: "18vh" }}
+          style={{ paddingTop: "var(--header-h)", paddingBottom: "2rem" }}
         >
           <span
             className="tracking-[0.4em] text-[11px] uppercase font-semibold"

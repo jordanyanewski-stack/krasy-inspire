@@ -15,7 +15,7 @@ export default async function AdminDashboard() {
       <AdminNav />
       <main style={{ flex: 1, padding: '2rem', overflowX: 'hidden' }}>
         <h1 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.75rem', color: 'var(--ink)', fontWeight: 400, marginBottom: '0.25rem' }}>
-          Добре дошла, Крейзи ✦
+          Добре дошла, Краси ✦
         </h1>
         <p style={{ color: 'var(--ink-soft)', fontSize: '0.875rem', marginBottom: '2rem' }}>
           Управлявай своето свещено пространство
