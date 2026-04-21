@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyPassword, getSessionToken } from '@/lib/auth'
+import { verifyPassword, createSessionToken } from '@/lib/auth'
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json()
   if (!verifyPassword(password)) {
     return NextResponse.json({ error: 'Грешна парола' }, { status: 401 })
   }
-  const token = getSessionToken()
+  const token = createSessionToken()
   const res = NextResponse.json({ ok: true })
   res.cookies.set('admin_token', token, {
     httpOnly: true,
