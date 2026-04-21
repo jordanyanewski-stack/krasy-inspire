@@ -11,83 +11,75 @@ export default async function AdminPostsPage() {
   const catMap = Object.fromEntries(categories.map(c => [c.slug, c.name]))
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div className="a-shell">
       <AdminNav />
-      <main style={{ flex: 1, padding: '2rem', overflowX: 'hidden' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <h1 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.75rem', color: 'var(--ink)', fontWeight: 400 }}>
-            Публикации
-          </h1>
-          <Link href="/admin/posts/new" style={{
-            padding: '0.65rem 1.25rem',
-            background: 'var(--ink)',
-            color: '#fdf8f2',
-            borderRadius: '0.75rem',
-            textDecoration: 'none',
-            fontSize: '0.85rem',
-          }}>
-            + Нова публикация
+      <main className="a-main a-fade">
+        <div className="a-page-head">
+          <div>
+            <p className="a-eyebrow" style={{ marginBottom: '0.5rem' }}>Библиотека</p>
+            <h1 className="a-page-title">Публикации</h1>
+            <p className="a-page-subtitle">{posts.length} {posts.length === 1 ? 'публикация' : 'публикации'} общо</p>
+          </div>
+          <Link href="/admin/posts/new" className="a-btn a-btn--primary">
+            <span>+</span> Нова публикация
           </Link>
         </div>
 
         {posts.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem', background: '#fff', borderRadius: '1rem', border: '1px solid #e0d8cc' }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.25rem', color: 'var(--ink-soft)' }}>
-              Няма публикации
-            </p>
-            <Link href="/admin/posts/new" style={{ color: 'var(--gold)', fontSize: '0.875rem' }}>
+          <div className="a-empty">
+            <p className="a-empty__title">Още няма публикации</p>
+            <Link href="/admin/posts/new" className="a-empty__cta">
               Създай първата публикация →
             </Link>
           </div>
         ) : (
-          <div style={{ background: '#fff', borderRadius: '1rem', border: '1px solid #e0d8cc', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="a-card-flush" style={{ overflowX: 'auto' }}>
+            <table className="a-table">
               <thead>
-                <tr style={{ background: '#fdf8f2', borderBottom: '1px solid #e0d8cc' }}>
-                  {['Заглавие', 'Дата', 'Категория', 'Статус', ''].map(h => (
-                    <th key={h} style={{ padding: '0.75rem 1rem', textAlign: 'left', fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', fontWeight: 400 }}>
-                      {h}
-                    </th>
-                  ))}
+                <tr>
+                  <th>Заглавие</th>
+                  <th style={{ whiteSpace: 'nowrap' }}>Дата</th>
+                  <th>Категория</th>
+                  <th>Статус</th>
+                  <th style={{ textAlign: 'right' }}>Действия</th>
                 </tr>
               </thead>
               <tbody>
-                {posts.map((post, i) => (
-                  <tr key={post.slug} style={{ borderTop: i > 0 ? '1px solid #f0ebe3' : 'none' }}>
-                    <td style={{ padding: '0.875rem 1rem' }}>
-                      <p style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>{post.title}</p>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--ink-soft)', marginTop: '0.1rem' }}>{post.slug}</p>
+                {posts.map((post) => (
+                  <tr key={post.slug}>
+                    <td>
+                      <p className="a-table__title">{post.title}</p>
+                      <p className="a-table__sub">{post.slug}</p>
                     </td>
-                    <td style={{ padding: '0.875rem 1rem', fontSize: '0.8rem', color: 'var(--ink-mid)', whiteSpace: 'nowrap' }}>
-                      {post.date}
-                    </td>
-                    <td style={{ padding: '0.875rem 1rem', fontSize: '0.8rem', color: 'var(--ink-mid)' }}>
+                    <td style={{ whiteSpace: 'nowrap', color: 'var(--a-text-mid)' }}>{post.date}</td>
+                    <td style={{ color: 'var(--a-text-mid)' }}>
                       {post.category ? (catMap[post.category] ?? post.category) : '—'}
                     </td>
-                    <td style={{ padding: '0.875rem 1rem' }}>
-                      <span style={{
-                        display: 'inline-block',
-                        padding: '0.2rem 0.5rem',
-                        borderRadius: '0.375rem',
-                        fontSize: '0.7rem',
-                        background: post.published !== false ? '#d4e8d8' : '#fee2e2',
-                        color: post.published !== false ? '#2d6a4f' : '#c0392b',
-                      }}>
-                        {post.published !== false ? 'Публикувана' : 'Чернова'}
-                      </span>
+                    <td>
+                      {post.published !== false ? (
+                        <span className="a-badge a-badge--success">
+                          <span className="a-badge__dot" />
+                          Публикувана
+                        </span>
+                      ) : (
+                        <span className="a-badge a-badge--draft">
+                          <span className="a-badge__dot" />
+                          Чернова
+                        </span>
+                      )}
                     </td>
-                    <td style={{ padding: '0.875rem 1rem', textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                    <td style={{ textAlign: 'right' }}>
+                      <div style={{ display: 'inline-flex', gap: '0.4rem' }}>
                         <Link
                           href={`/journal/${post.slug}`}
                           target="_blank"
-                          style={{ padding: '0.35rem 0.75rem', background: '#f5f4f0', borderRadius: '0.5rem', fontSize: '0.75rem', color: 'var(--ink-mid)', textDecoration: 'none' }}
+                          className="a-btn a-btn--subtle a-btn--sm"
                         >
                           Виж ↗
                         </Link>
                         <Link
                           href={`/admin/posts/${post.slug}/edit`}
-                          style={{ padding: '0.35rem 0.75rem', background: 'var(--ink)', borderRadius: '0.5rem', fontSize: '0.75rem', color: '#fff', textDecoration: 'none' }}
+                          className="a-btn a-btn--primary a-btn--sm"
                         >
                           Редактирай
                         </Link>

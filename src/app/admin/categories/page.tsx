@@ -59,89 +59,94 @@ export default function CategoriesPage() {
     if (res.ok) setCategories(data)
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '0.625rem 0.875rem',
-    border: '1px solid #e0d8cc',
-    borderRadius: '0.625rem',
-    background: '#fff',
-    color: 'var(--ink)',
-    fontSize: '0.9rem',
-    outline: 'none',
-  }
-  const labelStyle: React.CSSProperties = {
-    display: 'block',
-    fontSize: '0.7rem',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase' as const,
-    color: 'var(--ink-soft)',
-    marginBottom: '0.375rem',
-  }
-
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div className="a-shell">
       <AdminNav />
-      <main style={{ flex: 1, padding: '2rem', overflowX: 'hidden' }}>
-        <h1 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.75rem', color: 'var(--ink)', fontWeight: 400, marginBottom: '1.5rem' }}>
-          Категории
-        </h1>
+      <main className="a-main a-fade">
+        <div className="a-page-head">
+          <div>
+            <p className="a-eyebrow" style={{ marginBottom: '0.5rem' }}>Организация</p>
+            <h1 className="a-page-title">Категории</h1>
+            <p className="a-page-subtitle">{categories.length} {categories.length === 1 ? 'категория' : 'категории'}</p>
+          </div>
+        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.5rem' }}>
-          {/* List */}
-          <div style={{ background: '#fff', borderRadius: '1rem', border: '1px solid #e0d8cc', overflow: 'hidden' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) 340px',
+            gap: '1.5rem',
+            alignItems: 'start',
+          }}
+          className="a-categories-grid"
+        >
+          <div className="a-card-flush">
             {categories.length === 0 ? (
-              <p style={{ padding: '2rem', color: 'var(--ink-soft)', textAlign: 'center' }}>Няма категории</p>
+              <p style={{ padding: '3rem', color: 'var(--a-text-soft)', textAlign: 'center', fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.1rem' }}>
+                Още няма категории
+              </p>
             ) : (
-              categories.map((cat, i) => (
-                <div key={cat.slug} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem 1.25rem', borderTop: i > 0 ? '1px solid #f0ebe3' : 'none' }}>
-                  <div>
-                    <p style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>{cat.name}</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--ink-soft)', marginTop: '0.1rem' }}>{cat.slug}</p>
+              <div className="a-list">
+                {categories.map((cat) => (
+                  <div key={cat.slug} className="a-list__row">
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <p className="a-list__title">{cat.name}</p>
+                      <p className="a-list__meta">
+                        <span style={{ fontFamily: 'ui-monospace, monospace', fontSize: '0.72rem' }}>{cat.slug}</span>
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(cat.slug)}
+                      className="a-btn a-btn--danger a-btn--sm"
+                    >
+                      Изтрий
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleDelete(cat.slug)}
-                    style={{ padding: '0.35rem 0.75rem', background: '#fee2e2', border: 'none', borderRadius: '0.5rem', color: '#c0392b', fontSize: '0.75rem', cursor: 'pointer' }}
-                  >
-                    Изтрий
-                  </button>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </div>
 
-          {/* Add form */}
-          <div>
-            <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc' }}>
-              <h2 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.1rem', color: 'var(--ink)', fontWeight: 400, marginBottom: '1rem' }}>
-                Добави категория
+          <div className="a-card" style={{ position: 'sticky', top: '1rem' }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <p className="a-eyebrow" style={{ marginBottom: '0.3rem' }}>Добавяне</p>
+              <h2 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.25rem', color: 'var(--a-text)' }}>
+                Нова категория
               </h2>
-              <form onSubmit={handleAdd} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div>
-                  <label style={labelStyle}>Име</label>
-                  <input type="text" value={name} onChange={e => handleNameChange(e.target.value)} placeholder="Духовност" style={inputStyle} />
-                </div>
-                <div>
-                  <label style={labelStyle}>Slug</label>
-                  <input
-                    type="text"
-                    value={slug}
-                    onChange={e => { setSlugManual(true); setSlug(e.target.value) }}
-                    placeholder="spirituality"
-                    style={inputStyle}
-                  />
-                </div>
-                {error && <p style={{ color: '#c0392b', fontSize: '0.8rem' }}>{error}</p>}
-                <button
-                  type="submit"
-                  disabled={saving}
-                  style={{ padding: '0.7rem', background: 'var(--ink)', border: 'none', borderRadius: '0.625rem', color: '#fdf8f2', fontSize: '0.85rem', cursor: 'pointer' }}
-                >
-                  {saving ? 'Запазване…' : 'Добави'}
-                </button>
-              </form>
             </div>
+            <form onSubmit={handleAdd} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div>
+                <label className="a-label">Име</label>
+                <input type="text" value={name} onChange={e => handleNameChange(e.target.value)} placeholder="Духовност" className="a-input" />
+              </div>
+              <div>
+                <label className="a-label">Slug</label>
+                <input
+                  type="text"
+                  value={slug}
+                  onChange={e => { setSlugManual(true); setSlug(e.target.value) }}
+                  placeholder="spirituality"
+                  className="a-input"
+                  style={{ fontFamily: 'ui-monospace, monospace', fontSize: '0.85rem' }}
+                />
+              </div>
+              {error && <div className="a-alert a-alert--danger">{error}</div>}
+              <button
+                type="submit"
+                disabled={saving}
+                className="a-btn a-btn--primary a-btn--full"
+              >
+                {saving ? 'Запазване…' : 'Добави категория'}
+              </button>
+            </form>
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 900px) {
+            .a-categories-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </main>
     </div>
   )

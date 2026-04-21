@@ -32,28 +32,39 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#fdf8f2' }}>
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <p style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1rem', color: 'var(--ink-soft)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-            Krasy Inspire
-          </p>
-          <h1 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '2rem', color: 'var(--ink)', fontWeight: 400 }}>
+    <div className="a-login">
+      <div className="a-fade" style={{ width: '100%', maxWidth: 400 }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div
+            className="a-aside__mark"
+            style={{
+              width: 52,
+              height: 52,
+              fontSize: '1.6rem',
+              margin: '0 auto 1rem',
+              display: 'flex',
+            }}
+          >
+            ✦
+          </div>
+          <p className="a-eyebrow" style={{ marginBottom: '0.65rem' }}>Krasy Inspire</p>
+          <h1 style={{
+            fontFamily: 'Cormorant Garamond, Georgia, serif',
+            fontSize: '2.15rem',
+            color: 'var(--a-text)',
+            fontWeight: 400,
+            letterSpacing: '0.005em',
+          }}>
             Администрация
           </h1>
-          <div className="divider mt-3">
-            <span className="divider-ornament">✦</span>
-          </div>
+          <p className="a-page-subtitle" style={{ marginTop: '0.5rem' }}>
+            Влез, за да продължиш писането
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-8 space-y-5">
-          <div>
-            <label
-              htmlFor="password"
-              style={{ display: 'block', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '0.5rem' }}
-            >
-              Парола
-            </label>
+        <form onSubmit={handleSubmit} className="a-login__card">
+          <div style={{ marginBottom: '1.1rem' }}>
+            <label htmlFor="password" className="a-label">Парола</label>
             <input
               id="password"
               type="password"
@@ -62,45 +73,30 @@ export default function LoginPage() {
               required
               autoFocus
               placeholder="Въведи паролата"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                border: '1px solid #e0d8cc',
-                borderRadius: '0.75rem',
-                background: '#fdf8f2',
-                color: 'var(--ink)',
-                fontSize: '1rem',
-                outline: 'none',
-              }}
+              className="a-input"
+              style={{ padding: '0.85rem 1rem', fontSize: '1rem' }}
             />
           </div>
 
           {error && (
-            <p style={{ color: '#c0392b', fontSize: '0.875rem', textAlign: 'center' }}>{error}</p>
+            <div className="a-alert a-alert--danger" style={{ marginBottom: '1rem', justifyContent: 'center' }}>
+              {error}
+            </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            style={{
-              width: '100%',
-              padding: '0.875rem',
-              background: 'var(--ink)',
-              color: '#fdf8f2',
-              border: 'none',
-              borderRadius: '0.75rem',
-              fontFamily: 'Lato, sans-serif',
-              fontSize: '0.875rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.7 : 1,
-              transition: 'opacity 0.2s',
-            }}
+            className="a-btn a-btn--primary a-btn--lg a-btn--full"
+            style={{ letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.8rem' }}
           >
             {loading ? 'Влизане…' : 'Влез'}
           </button>
         </form>
+
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--a-text-soft)', fontSize: '0.78rem', letterSpacing: '0.05em' }}>
+          ✦ свещено пространство ✦
+        </p>
       </div>
     </div>
   )

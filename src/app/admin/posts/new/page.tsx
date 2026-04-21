@@ -5,9 +5,9 @@ import { getAllCategories } from '@/lib/categories'
 export default async function NewPostPage() {
   const categories = await getAllCategories()
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div className="a-shell">
       <AdminNav />
-      <main style={{ flex: 1, padding: '2rem', overflowX: 'hidden' }}>
+      <main className="a-main a-fade">
         <PostEditor categories={categories} mode="create" />
       </main>
     </div>

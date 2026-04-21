@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 export type PostFormData = {
@@ -234,138 +234,83 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
     }
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '0.625rem 0.875rem',
-    border: '1px solid #e0d8cc',
-    borderRadius: '0.625rem',
-    background: '#fff',
-    color: 'var(--ink)',
-    fontSize: '0.9rem',
-    outline: 'none',
-    fontFamily: 'Lato, sans-serif',
-  }
-
-  const labelStyle: React.CSSProperties = {
-    display: 'block',
-    fontSize: '0.7rem',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    color: 'var(--ink-soft)',
-    marginBottom: '0.375rem',
-  }
-
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ maxWidth: 1060, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <h1 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.5rem', color: 'var(--ink)', fontWeight: 400 }}>
-          {mode === 'create' ? 'Нова публикация' : 'Редактирай публикация'}
-        </h1>
+      <div className="a-page-head" style={{ marginBottom: '1.5rem' }}>
+        <div>
+          <p className="a-eyebrow" style={{ marginBottom: '0.4rem' }}>
+            {mode === 'create' ? 'Ново' : 'Редакция'}
+          </p>
+          <h1 className="a-page-title" style={{ fontSize: '1.75rem' }}>
+            {mode === 'create' ? 'Нова публикация' : form.title || 'Редактирай публикация'}
+          </h1>
+        </div>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           {mode === 'edit' && (
-            <button
-              onClick={handleDelete}
-              disabled={deleting}
-              style={{ padding: '0.6rem 1rem', background: '#fee2e2', border: 'none', borderRadius: '0.5rem', color: '#c0392b', fontSize: '0.8rem', cursor: 'pointer' }}
-            >
+            <button onClick={handleDelete} disabled={deleting} className="a-btn a-btn--danger">
               {deleting ? 'Изтриване…' : 'Изтрий'}
             </button>
           )}
-          <button
-            onClick={() => setPreview(!preview)}
-            style={{ padding: '0.6rem 1rem', background: '#f5f4f0', border: '1px solid #e0d8cc', borderRadius: '0.5rem', color: 'var(--ink-mid)', fontSize: '0.8rem', cursor: 'pointer' }}
-          >
-            {preview ? 'Редактор' : 'Преглед'}
+          <button onClick={() => setPreview(!preview)} className="a-btn a-btn--ghost">
+            {preview ? '✎ Редактор' : '◉ Преглед'}
           </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            style={{ padding: '0.6rem 1.25rem', background: 'var(--ink)', border: 'none', borderRadius: '0.5rem', color: '#fdf8f2', fontSize: '0.8rem', cursor: 'pointer', letterSpacing: '0.05em' }}
-          >
+          <button onClick={handleSave} disabled={saving} className="a-btn a-btn--primary">
             {saving ? 'Запазване…' : 'Запази'}
           </button>
         </div>
       </div>
 
       {error && (
-        <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '0.75rem', padding: '0.75rem 1rem', marginBottom: '1rem', color: '#c0392b', fontSize: '0.875rem' }}>
-          {error}
+        <div className="a-alert a-alert--danger" style={{ marginBottom: '1rem' }}>
+          <span>⚠</span> {error}
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.5rem' }} className="editor-grid">
+      <div className="a-editor-grid">
         {/* Main editor */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="a-editor-main">
           {/* Title */}
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc' }}>
-            <label style={labelStyle}>Заглавие</label>
+          <div className="a-card" style={{ padding: '0.4rem 0.6rem' }}>
             <input
               type="text"
               value={form.title}
               onChange={e => handleTitleChange(e.target.value)}
-              placeholder="Заглавие на публикацията"
-              style={{ ...inputStyle, fontSize: '1.1rem', fontFamily: 'Cormorant Garamond, Georgia, serif' }}
+              placeholder="Заглавие на публикацията…"
+              className="a-input a-input--title"
             />
           </div>
 
           {/* Content editor */}
-          <div style={{ background: '#fff', borderRadius: '1rem', border: '1px solid #e0d8cc', overflow: 'hidden' }}>
-            {/* Toolbar */}
+          <div className="a-card-flush">
             {!preview && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', padding: '0.625rem 0.875rem', borderBottom: '1px solid #f0ebe3', background: '#fdf8f2' }}>
+              <div className="a-toolbar">
                 {TOOLBAR.map(action => (
                   <button
                     key={action.label}
                     title={action.title}
                     type="button"
                     onClick={() => applyToolbar(action)}
-                    style={{
-                      padding: '0.25rem 0.5rem',
-                      background: 'transparent',
-                      border: '1px solid #e0d8cc',
-                      borderRadius: '0.375rem',
-                      color: 'var(--ink-mid)',
-                      fontSize: '0.75rem',
-                      cursor: 'pointer',
-                      fontFamily: 'Lato, sans-serif',
-                    }}
+                    className="a-toolbar__btn"
                   >
                     {action.label}
                   </button>
                 ))}
-                {/* Image insert */}
+                <span className="a-toolbar__sep" />
                 <button
                   type="button"
                   title="Вмъкни снимка"
                   onClick={() => imgInputRef.current?.click()}
                   disabled={uploadingImg}
-                  style={{
-                    padding: '0.25rem 0.5rem',
-                    background: uploadingImg ? '#e8e0f0' : 'transparent',
-                    border: '1px solid #e0d8cc',
-                    borderRadius: '0.375rem',
-                    color: 'var(--ink-mid)',
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
+                  className="a-toolbar__btn"
                 >
                   {uploadingImg ? '…' : '🖼 Снимка'}
                 </button>
-                {/* Video insert */}
                 <button
                   type="button"
                   title="Вмъкни видео"
                   onClick={() => setShowVideoModal(true)}
-                  style={{
-                    padding: '0.25rem 0.5rem',
-                    background: 'transparent',
-                    border: '1px solid #e0d8cc',
-                    borderRadius: '0.375rem',
-                    color: 'var(--ink-mid)',
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
+                  className="a-toolbar__btn"
                 >
                   ▶ Видео
                 </button>
@@ -385,8 +330,7 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
 
             {preview ? (
               <div
-                className="prose-krasy"
-                style={{ padding: '1.25rem', minHeight: 300 }}
+                className="a-preview"
                 dangerouslySetInnerHTML={{ __html: markdownToHtmlPreview(form.content) }}
               />
             ) : (
@@ -395,46 +339,26 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
                 value={form.content}
                 onChange={e => set('content', e.target.value)}
                 placeholder="Пиши тук на Markdown…"
-                style={{
-                  width: '100%',
-                  minHeight: 400,
-                  padding: '1rem',
-                  border: 'none',
-                  resize: 'vertical',
-                  outline: 'none',
-                  fontFamily: 'monospace',
-                  fontSize: '0.875rem',
-                  lineHeight: 1.7,
-                  color: 'var(--ink)',
-                  background: '#fff',
-                }}
+                className="a-textarea a-textarea--code"
+                style={{ minHeight: 480 }}
+                spellCheck={false}
               />
             )}
           </div>
         </div>
 
         {/* Sidebar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {/* Publish */}
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc' }}>
-            <label style={labelStyle}>Статус</label>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="a-editor-aside">
+          {/* Status */}
+          <div className="a-card">
+            <label className="a-label">Статус</label>
+            <div className="a-segment">
               {[{ v: true, l: 'Публикувана' }, { v: false, l: 'Чернова' }].map(opt => (
                 <button
                   key={String(opt.v)}
                   type="button"
                   onClick={() => set('published', opt.v)}
-                  style={{
-                    flex: 1,
-                    padding: '0.5rem',
-                    border: '1px solid',
-                    borderColor: form.published === opt.v ? 'var(--ink)' : '#e0d8cc',
-                    borderRadius: '0.5rem',
-                    background: form.published === opt.v ? 'var(--ink)' : '#fff',
-                    color: form.published === opt.v ? '#fff' : 'var(--ink-mid)',
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                  }}
+                  className={`a-segment__btn${form.published === opt.v ? ' is-active' : ''}`}
                 >
                   {opt.l}
                 </button>
@@ -443,24 +367,25 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
           </div>
 
           {/* Meta */}
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc', display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+          <div className="a-card" style={{ display: 'flex', flexDirection: 'column', gap: '0.95rem' }}>
             <div>
-              <label style={labelStyle}>Slug (URL)</label>
+              <label className="a-label">Slug (URL)</label>
               <input
                 type="text"
                 value={form.slug}
                 onChange={e => { setSlugManual(true); set('slug', e.target.value) }}
                 placeholder="moya-publikaciya"
-                style={inputStyle}
+                className="a-input"
+                style={{ fontFamily: 'ui-monospace, monospace', fontSize: '0.85rem' }}
               />
             </div>
             <div>
-              <label style={labelStyle}>Дата</label>
-              <input type="date" value={form.date} onChange={e => set('date', e.target.value)} style={inputStyle} />
+              <label className="a-label">Дата</label>
+              <input type="date" value={form.date} onChange={e => set('date', e.target.value)} className="a-input" />
             </div>
             <div>
-              <label style={labelStyle}>Категория</label>
-              <select value={form.category} onChange={e => set('category', e.target.value)} style={inputStyle}>
+              <label className="a-label">Категория</label>
+              <select value={form.category} onChange={e => set('category', e.target.value)} className="a-select">
                 <option value="">— без категория —</option>
                 {categories.map(c => (
                   <option key={c.slug} value={c.slug}>{c.name}</option>
@@ -470,27 +395,28 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
           </div>
 
           {/* Excerpt */}
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc' }}>
-            <label style={labelStyle}>Извадка (описание)</label>
+          <div className="a-card">
+            <label className="a-label">Извадка</label>
             <textarea
               value={form.excerpt}
               onChange={e => set('excerpt', e.target.value)}
               placeholder="Кратко описание за списъка…"
               rows={3}
-              style={{ ...inputStyle, resize: 'vertical' }}
+              className="a-textarea"
             />
           </div>
 
           {/* Cover image */}
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc' }}>
-            <label style={labelStyle}>Корица (снимка)</label>
+          <div className="a-card">
+            <label className="a-label">Корица</label>
             {form.coverImage && (
-              <div style={{ marginBottom: '0.75rem', position: 'relative' }}>
-                <img src={form.coverImage} alt="Корица" style={{ width: '100%', height: 120, objectFit: 'cover', borderRadius: '0.5rem' }} />
+              <div className="a-cover-preview">
+                <img src={form.coverImage} alt="Корица" />
                 <button
                   type="button"
                   onClick={() => set('coverImage', '')}
-                  style={{ position: 'absolute', top: 4, right: 4, background: 'rgba(0,0,0,0.5)', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, fontSize: '0.7rem', cursor: 'pointer' }}
+                  className="a-cover-remove"
+                  aria-label="Премахни"
                 >
                   ✕
                 </button>
@@ -500,23 +426,15 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
               type="text"
               value={form.coverImage}
               onChange={e => set('coverImage', e.target.value)}
-              placeholder="URL или качи снимка"
-              style={{ ...inputStyle, marginBottom: '0.5rem' }}
+              placeholder="URL или качи…"
+              className="a-input"
+              style={{ marginBottom: '0.6rem' }}
             />
             <button
               type="button"
               disabled={uploadingImg}
               onClick={() => coverImgRef.current?.click()}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                background: '#f5f4f0',
-                border: '1px dashed #c9b8e8',
-                borderRadius: '0.5rem',
-                color: 'var(--ink-mid)',
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-              }}
+              className="a-dropzone"
             >
               {uploadingImg ? 'Качване…' : '↑ Качи снимка'}
             </button>
@@ -534,30 +452,24 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
           </div>
 
           {/* Cover color */}
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '1.25rem', border: '1px solid #e0d8cc' }}>
-            <label style={labelStyle}>Акцентен цвят</label>
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <div className="a-card">
+            <label className="a-label">Акцентен цвят</label>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
               <input
                 type="color"
                 value={form.coverColor}
                 onChange={e => set('coverColor', e.target.value)}
-                style={{ width: 36, height: 36, border: 'none', background: 'none', cursor: 'pointer', borderRadius: '0.375rem' }}
+                className="a-color-native"
               />
-              <div style={{ flex: 1, display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                 {['#f7e8e8', '#e8c4c4', '#e8e0f0', '#c9b8e8', '#d4e8d8', '#d8ecf0', '#b8935a'].map(c => (
                   <button
                     key={c}
                     type="button"
                     title={c}
                     onClick={() => set('coverColor', c)}
-                    style={{
-                      width: 20,
-                      height: 20,
-                      background: c,
-                      border: form.coverColor === c ? '2px solid var(--ink)' : '1px solid #e0d8cc',
-                      borderRadius: '50%',
-                      cursor: 'pointer',
-                    }}
+                    className={`a-swatch${form.coverColor === c ? ' is-active' : ''}`}
+                    style={{ background: c }}
                   />
                 ))}
               </div>
@@ -567,49 +479,47 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
       </div>
 
       {/* Bottom save */}
-      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+      <div style={{ marginTop: '1.75rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', flexWrap: 'wrap' }}>
         {mode === 'edit' && (
-          <a href={`/journal/${initial?.slug}`} target="_blank" style={{ padding: '0.75rem 1.25rem', border: '1px solid #e0d8cc', borderRadius: '0.75rem', color: 'var(--ink-mid)', textDecoration: 'none', fontSize: '0.85rem' }}>
+          <a href={`/journal/${initial?.slug}`} target="_blank" className="a-btn a-btn--ghost">
             Виж публикацията ↗
           </a>
         )}
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          style={{ padding: '0.75rem 2rem', background: 'var(--ink)', border: 'none', borderRadius: '0.75rem', color: '#fdf8f2', fontSize: '0.875rem', cursor: 'pointer', letterSpacing: '0.05em' }}
-        >
+        <button onClick={handleSave} disabled={saving} className="a-btn a-btn--primary a-btn--lg">
           {saving ? 'Запазване…' : mode === 'create' ? 'Публикувай' : 'Запази промените'}
         </button>
       </div>
 
       {/* Video modal */}
       {showVideoModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-          <div style={{ background: '#fff', borderRadius: '1rem', padding: '2rem', width: '100%', maxWidth: 480, margin: '1rem' }}>
-            <h3 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--ink)' }}>
+        <div className="a-modal-scrim" onClick={() => setShowVideoModal(false)}>
+          <div className="a-modal" onClick={e => e.stopPropagation()}>
+            <p className="a-eyebrow" style={{ marginBottom: '0.35rem' }}>Медия</p>
+            <h3 style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '1.4rem', marginBottom: '1.1rem', color: 'var(--a-text)' }}>
               Вмъкни видео
             </h3>
-            <label style={labelStyle}>YouTube URL или embed линк</label>
+            <label className="a-label">YouTube URL или embed линк</label>
             <input
               type="url"
               value={videoUrl}
               onChange={e => setVideoUrl(e.target.value)}
               placeholder="https://www.youtube.com/watch?v=..."
-              style={{ ...inputStyle, marginBottom: '1rem' }}
+              className="a-input"
+              style={{ marginBottom: '1.25rem' }}
               autoFocus
             />
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
               <button
                 type="button"
                 onClick={() => { setShowVideoModal(false); setVideoUrl('') }}
-                style={{ padding: '0.6rem 1rem', background: '#f5f4f0', border: '1px solid #e0d8cc', borderRadius: '0.5rem', cursor: 'pointer', fontSize: '0.85rem' }}
+                className="a-btn a-btn--ghost"
               >
                 Отказ
               </button>
               <button
                 type="button"
                 onClick={insertYoutube}
-                style={{ padding: '0.6rem 1.25rem', background: 'var(--ink)', border: 'none', borderRadius: '0.5rem', color: '#fff', cursor: 'pointer', fontSize: '0.85rem' }}
+                className="a-btn a-btn--primary"
               >
                 Вмъкни
               </button>
@@ -617,14 +527,6 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
           </div>
         </div>
       )}
-
-      <style>{`
-        @media (max-width: 680px) {
-          .editor-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   )
 }
@@ -639,7 +541,7 @@ function markdownToHtmlPreview(md: string): string {
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
     .replace(/^- (.+)$/gm, '<li>$1</li>')
     .replace(/^---$/gm, '<hr />')
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" style="max-width:100%" />')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" />')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
     .replace(/\n\n/g, '</p><p>')
     .replace(/^(.+)$/gm, (line) => line.startsWith('<') ? line : `<p>${line}</p>`)
