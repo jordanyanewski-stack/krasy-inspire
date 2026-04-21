@@ -1,39 +1,26 @@
-import fs from 'fs'
-import path from 'path'
-
-const categoriesFile = path.join(process.cwd(), 'content/categories.json')
+import { getDb } from '@/db'
+import { categories } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export type Category = {
   slug: string
   name: string
 }
 
-export function getAllCategories(): Category[] {
-  if (!fs.existsSync(categoriesFile)) return []
-  try {
-    return JSON.parse(fs.readFileSync(categoriesFile, 'utf-8')) as Category[]
-  } catch {
-    return []
-  }
+export async function getAllCategories(): Promise<Category[]> {
+  const db = getDb()
+  const rows = await db.select().from(categories)
+  return rows.map(r => ({ slug: r.slug, name: r.name }))
 }
 
-export function saveCategories(categories: Category[]): void {
-  fs.writeFileSync(categoriesFile, JSON.stringify(categories, null, 2), 'utf-8')
+export async function addCategory(slug: string, name: string): Promise<Category[]> {
+  const db = getDb()
+  await db.insert(categories).values({ slug, name })
+  return getAllCategories()
 }
 
-export function addCategory(slug: string, name: string): Category[] {
-  const categories = getAllCategories()
-  if (categories.find(c => c.slug === slug)) {
-    throw new Error('Категорията вече съществува')
-  }
-  const updated = [...categories, { slug, name }]
-  saveCategories(updated)
-  return updated
-}
-
-export function deleteCategory(slug: string): Category[] {
-  const categories = getAllCategories()
-  const updated = categories.filter(c => c.slug !== slug)
-  saveCategories(updated)
-  return updated
+export async function deleteCategory(slug: string): Promise<Category[]> {
+  const db = getDb()
+  await db.delete(categories).where(eq(categories.slug, slug))
+  return getAllCategories()
 }

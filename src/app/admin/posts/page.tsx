@@ -3,9 +3,9 @@ import { getAllPosts } from '@/lib/posts'
 import { getAllCategories } from '@/lib/categories'
 import Link from 'next/link'
 
-export default function AdminPostsPage() {
-  const posts = getAllPosts()
-  const categories = getAllCategories()
+export default async function AdminPostsPage() {
+  const posts = await getAllPosts()
+  const categories = await getAllCategories()
   const catMap = Object.fromEntries(categories.map(c => [c.slug, c.name]))
 
   return (

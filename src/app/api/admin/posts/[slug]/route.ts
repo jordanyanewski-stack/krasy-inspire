@@ -18,7 +18,7 @@ export async function GET(
   }
   const { slug } = await params
   try {
-    return NextResponse.json(getPost(slug))
+    return NextResponse.json(await getPost(slug))
   } catch {
     return NextResponse.json({ error: 'Не е намерен' }, { status: 404 })
   }
@@ -34,7 +34,7 @@ export async function PUT(
   const { slug } = await params
   const body = await req.json()
   const { slug: _s, ...rest } = body
-  writePost(slug, rest)
+  await writePost(slug, rest)
   return NextResponse.json({ ok: true })
 }
 
@@ -46,6 +46,6 @@ export async function DELETE(
     return NextResponse.json({ error: 'Неоторизиран' }, { status: 401 })
   }
   const { slug } = await params
-  deletePost(slug)
+  await deletePost(slug)
   return NextResponse.json({ ok: true })
 }

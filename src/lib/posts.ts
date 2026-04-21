@@ -1,94 +1,76 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-
-const postsDir = path.join(process.cwd(), "content/posts");
+import { getDb } from '@/db'
+import { posts } from '@/db/schema'
+import { eq, desc } from 'drizzle-orm'
 
 export type PostMeta = {
-  slug: string;
-  title: string;
-  date: string;
-  excerpt?: string;
-  category?: string;
-  coverColor?: string;
-  coverImage?: string;
-  published?: boolean;
-};
-
-export type Post = PostMeta & { content: string };
-
-function slugsFromDir(): string[] {
-  if (!fs.existsSync(postsDir)) return [];
-  return fs
-    .readdirSync(postsDir)
-    .filter((f) => f.endsWith(".md") || f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.(md|mdx)$/, ""));
+  slug: string
+  title: string
+  date: string
+  excerpt?: string
+  category?: string
+  coverColor?: string
+  coverImage?: string
+  published?: boolean
 }
 
-function readPost(slug: string): Post {
-  const extensions = [".md", ".mdx"];
-  for (const ext of extensions) {
-    const filePath = path.join(postsDir, `${slug}${ext}`);
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const { data, content } = matter(raw);
-      return {
-        slug,
-        title: data.title ?? slug,
-        date: data.date ? String(data.date) : "",
-        excerpt: data.excerpt,
-        category: data.category,
-        coverColor: data.coverColor,
-        coverImage: data.coverImage,
-        published: data.published !== false,
-        content,
-      };
-    }
+export type Post = PostMeta & { content: string }
+
+export async function getAllPosts(): Promise<PostMeta[]> {
+  const db = getDb()
+  const rows = await db
+    .select()
+    .from(posts)
+    .orderBy(desc(posts.date))
+  return rows.map(rowToMeta)
+}
+
+export async function getPost(slug: string): Promise<Post> {
+  const db = getDb()
+  const [row] = await db.select().from(posts).where(eq(posts.slug, slug))
+  if (!row) throw new Error(`Post not found: ${slug}`)
+  return { ...rowToMeta(row), content: row.content }
+}
+
+export async function getAllSlugs(): Promise<string[]> {
+  const db = getDb()
+  const rows = await db.select({ slug: posts.slug }).from(posts).where(eq(posts.published, true))
+  return rows.map(r => r.slug)
+}
+
+export async function writePost(slug: string, data: Omit<Post, 'slug'>): Promise<void> {
+  const db = getDb()
+  const values = {
+    slug,
+    title: data.title,
+    date: data.date,
+    excerpt: data.excerpt ?? null,
+    category: data.category ?? null,
+    coverColor: data.coverColor ?? null,
+    coverImage: data.coverImage ?? null,
+    content: data.content,
+    published: data.published !== false,
+    updatedAt: new Date(),
   }
-  throw new Error(`Post not found: ${slug}`);
+  await db
+    .insert(posts)
+    .values(values)
+    .onConflictDoUpdate({ target: posts.slug, set: values })
 }
 
-export function getAllPosts(): PostMeta[] {
-  return slugsFromDir()
-    .map((slug) => {
-      const { content: _c, ...meta } = readPost(slug);
-      return meta;
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+export async function deletePost(slug: string): Promise<void> {
+  const db = getDb()
+  await db.delete(posts).where(eq(posts.slug, slug))
 }
 
-export function getPost(slug: string): Post {
-  return readPost(slug);
-}
-
-export function getAllSlugs(): string[] {
-  return slugsFromDir();
-}
-
-export function writePost(slug: string, data: Omit<Post, 'slug'>): void {
-  if (!fs.existsSync(postsDir)) fs.mkdirSync(postsDir, { recursive: true });
-  const frontmatter = [
-    `title: "${data.title.replace(/"/g, '\\"')}"`,
-    `date: "${data.date}"`,
-    data.excerpt ? `excerpt: "${data.excerpt.replace(/"/g, '\\"')}"` : null,
-    data.category ? `category: "${data.category}"` : null,
-    data.coverColor ? `coverColor: "${data.coverColor}"` : null,
-    data.coverImage ? `coverImage: "${data.coverImage}"` : null,
-    data.published === false ? `published: false` : null,
-  ]
-    .filter(Boolean)
-    .join('\n');
-  const fileContent = `---\n${frontmatter}\n---\n\n${data.content}`;
-  fs.writeFileSync(path.join(postsDir, `${slug}.md`), fileContent, 'utf-8');
-}
-
-export function deletePost(slug: string): void {
-  const extensions = ['.md', '.mdx'];
-  for (const ext of extensions) {
-    const filePath = path.join(postsDir, `${slug}${ext}`);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      return;
-    }
+function rowToMeta(row: typeof posts.$inferSelect): PostMeta {
+  return {
+    slug: row.slug,
+    title: row.title,
+    date: row.date,
+    excerpt: row.excerpt ?? undefined,
+    category: row.category ?? undefined,
+    coverColor: row.coverColor ?? undefined,
+    coverImage: row.coverImage ?? undefined,
+    published: row.published,
   }
 }

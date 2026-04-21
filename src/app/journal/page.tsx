@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   description: "Размисли за духовност, себелюбие, осъзнатост и мантри.",
 };
 
-export default function JournalPage() {
-  const posts = getAllPosts();
+export default async function JournalPage() {
+  const posts = await getAllPosts();
 
   return (
     <div className="max-w-5xl mx-auto px-6 pb-20" style={{ paddingTop: "calc(5rem + var(--header-h))" }}>

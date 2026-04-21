@@ -3,9 +3,9 @@ import { getAllPosts } from '@/lib/posts'
 import { getAllCategories } from '@/lib/categories'
 import Link from 'next/link'
 
-export default function AdminDashboard() {
-  const posts = getAllPosts()
-  const categories = getAllCategories()
+export default async function AdminDashboard() {
+  const posts = await getAllPosts()
+  const categories = await getAllCategories()
   const published = posts.filter(p => p.published !== false)
   const drafts = posts.filter(p => p.published === false)
   const recent = posts.slice(0, 5)

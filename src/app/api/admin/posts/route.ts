@@ -13,7 +13,7 @@ export async function GET() {
   if (!(await requireAuth())) {
     return NextResponse.json({ error: 'Неоторизиран' }, { status: 401 })
   }
-  return NextResponse.json(getAllPosts())
+  return NextResponse.json(await getAllPosts())
 }
 
 export async function POST(req: NextRequest) {
@@ -25,6 +25,6 @@ export async function POST(req: NextRequest) {
   if (!slug || !rest.title) {
     return NextResponse.json({ error: 'Липсва slug или заглавие' }, { status: 400 })
   }
-  writePost(slug, rest)
+  await writePost(slug, rest)
   return NextResponse.json({ ok: true, slug })
 }

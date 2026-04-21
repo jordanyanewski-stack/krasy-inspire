@@ -81,8 +81,8 @@ const spaces = [
   },
 ];
 
-export default function Home() {
-  const posts = getAllPosts().slice(0, 3);
+export default async function Home() {
+  const posts = (await getAllPosts()).slice(0, 3);
   const affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
 
   return (

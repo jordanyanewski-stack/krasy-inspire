@@ -6,11 +6,11 @@ import { notFound } from 'next/navigation'
 
 export default async function EditPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const categories = getAllCategories()
+  const categories = await getAllCategories()
 
   let post
   try {
-    post = getPost(slug)
+    post = await getPost(slug)
   } catch {
     notFound()
   }

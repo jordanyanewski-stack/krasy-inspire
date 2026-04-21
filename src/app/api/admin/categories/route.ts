@@ -13,7 +13,7 @@ export async function GET() {
   if (!(await requireAuth())) {
     return NextResponse.json({ error: 'Неоторизиран' }, { status: 401 })
   }
-  return NextResponse.json(getAllCategories())
+  return NextResponse.json(await getAllCategories())
 }
 
 export async function POST(req: NextRequest) {
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Липсват полета' }, { status: 400 })
   }
   try {
-    const updated = addCategory(slug, name)
+    const updated = await addCategory(slug, name)
     return NextResponse.json(updated)
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 409 })
@@ -37,6 +37,6 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Неоторизиран' }, { status: 401 })
   }
   const { slug } = await req.json()
-  const updated = deleteCategory(slug)
+  const updated = await deleteCategory(slug)
   return NextResponse.json(updated)
 }

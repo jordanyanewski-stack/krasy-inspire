@@ -2,8 +2,8 @@ import AdminNav from '@/components/admin/AdminNav'
 import PostEditor from '@/components/admin/PostEditor'
 import { getAllCategories } from '@/lib/categories'
 
-export default function NewPostPage() {
-  const categories = getAllCategories()
+export default async function NewPostPage() {
+  const categories = await getAllCategories()
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <AdminNav />

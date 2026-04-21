@@ -8,13 +8,14 @@ import Link from "next/link";
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  const slugs = await getAllSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const post = getPost(slug);
+    const post = await getPost(slug);
     return { title: post.title, description: post.excerpt ?? post.title };
   } catch {
     return { title: "Не е намерено" };
@@ -25,7 +26,7 @@ export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   let post;
   try {
-    post = getPost(slug);
+    post = await getPost(slug);
   } catch {
     notFound();
   }
