@@ -210,8 +210,8 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      router.push('/admin/posts')
       router.refresh()
+      router.push('/admin/posts')
     } catch (err) {
       setError((err as Error).message)
     } finally {
@@ -225,8 +225,8 @@ export default function PostEditor({ initial, categories, mode }: PostEditorProp
     try {
       const res = await fetch(`/api/admin/posts/${initial?.slug}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Грешка при изтриване')
-      router.push('/admin/posts')
       router.refresh()
+      router.push('/admin/posts')
     } catch (err) {
       setError((err as Error).message)
     } finally {

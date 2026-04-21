@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { verifySessionToken } from '@/lib/auth'
 import { getAllPosts, writePost } from '@/lib/posts'
 
@@ -26,5 +27,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Липсва slug или заглавие' }, { status: 400 })
   }
   await writePost(slug, rest)
+  revalidatePath('/admin/posts')
   return NextResponse.json({ ok: true, slug })
 }

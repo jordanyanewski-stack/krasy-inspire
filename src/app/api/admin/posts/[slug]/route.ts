@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { verifySessionToken } from '@/lib/auth'
 import { getPost, writePost, deletePost } from '@/lib/posts'
 
@@ -35,6 +36,7 @@ export async function PUT(
   const body = await req.json()
   const { slug: _s, ...rest } = body
   await writePost(slug, rest)
+  revalidatePath('/admin/posts')
   return NextResponse.json({ ok: true })
 }
 
@@ -47,5 +49,6 @@ export async function DELETE(
   }
   const { slug } = await params
   await deletePost(slug)
+  revalidatePath('/admin/posts')
   return NextResponse.json({ ok: true })
 }

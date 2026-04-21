@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import AdminNav from '@/components/admin/AdminNav'
 import { getAllPosts } from '@/lib/posts'
 import { getAllCategories } from '@/lib/categories'
