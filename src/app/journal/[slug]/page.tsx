@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import { getPost, getAllSlugs } from "@/lib/posts";
+import { getPublishedPost } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { remark } from "remark";
@@ -9,15 +9,10 @@ import Link from "next/link";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const post = await getPost(slug);
+    const post = await getPublishedPost(slug);
     return { title: post.title, description: post.excerpt ?? post.title };
   } catch {
     return { title: "Не е намерено" };
@@ -28,7 +23,7 @@ export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   let post;
   try {
-    post = await getPost(slug);
+    post = await getPublishedPost(slug);
   } catch {
     notFound();
   }
