@@ -6,7 +6,7 @@ import PostCard from "@/components/PostCard";
 import FadeIn from "@/components/FadeIn";
 import HeroCanvas from "@/components/HeroCanvas";
 import HeroSection from "@/components/HeroSection";
-import { getAllPosts } from "@/lib/posts";
+import { getPublishedPosts } from "@/lib/posts";
 import {
   MoonIcon,
   RoseIcon,
@@ -84,7 +84,7 @@ const spaces = [
 ];
 
 export default async function Home() {
-  const posts = (await getAllPosts()).slice(0, 3);
+  const posts = (await getPublishedPosts()).slice(0, 3);
   const affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
 
   return (

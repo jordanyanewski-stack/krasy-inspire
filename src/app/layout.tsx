@@ -4,15 +4,21 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://krasyinspire.com"),
   title: {
     default: "Krasy Inspire",
     template: "%s · Krasy Inspire",
   },
   description:
     "Свещено пространство за женска енергия, духовен растеж и вдъхновен живот.",
+  twitter: {card:"summary_large_image",images:["/krasy.jpg"]},
   openGraph: {
     siteName: "Krasy Inspire",
     type: "website",
+    locale: "bg_BG",
+    title: "Krasy Inspire",
+    description: "Свещено пространство за женска енергия, духовен растеж и вдъхновен живот.",
+    images: [{url:"/krasy.jpg",alt:"Краси — Krasy Inspire"}],
   },
 };
 

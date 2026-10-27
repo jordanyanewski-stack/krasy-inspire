@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import PostCard from "@/components/PostCard";
 import FadeIn from "@/components/FadeIn";
-import { getAllPosts } from "@/lib/posts";
+import { getPublishedPosts } from "@/lib/posts";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function JournalPage() {
-  const posts = await getAllPosts();
+  const posts = await getPublishedPosts();
 
   return (
     <div className="max-w-5xl mx-auto px-6 pb-20" style={{ paddingTop: "calc(5rem + var(--header-h))" }}>

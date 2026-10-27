@@ -1,6 +1,6 @@
 import { getDb } from '@/db'
 import { posts } from '@/db/schema'
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, and } from 'drizzle-orm'
 
 export type PostMeta = {
   slug: string
@@ -14,6 +14,18 @@ export type PostMeta = {
 }
 
 export type Post = PostMeta & { content: string }
+
+// Public readers must never share the admin query that includes drafts.
+export async function getPublishedPosts(): Promise<PostMeta[]> {
+  const rows = await getDb().select().from(posts).where(eq(posts.published, true)).orderBy(desc(posts.date))
+  return rows.map(rowToMeta)
+}
+
+export async function getPublishedPost(slug: string): Promise<Post> {
+  const [row] = await getDb().select().from(posts).where(and(eq(posts.slug, slug), eq(posts.published, true)))
+  if (!row) throw new Error(`Post not found: ${slug}`)
+  return { ...rowToMeta(row), content: row.content }
+}
 
 export async function getAllPosts(): Promise<PostMeta[]> {
   const db = getDb()
