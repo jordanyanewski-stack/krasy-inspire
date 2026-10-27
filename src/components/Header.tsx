@@ -33,7 +33,7 @@ export default function Header() {
         transition: "background 400ms ease, backdrop-filter 400ms ease, box-shadow 400ms ease, border-color 400ms ease",
         background: ghost
           ? "transparent"
-          : "rgba(18,13,31,0.90)",
+          : "rgba(60,30,50,0.88)",
         backdropFilter: ghost
           ? "none"
           : "blur(20px) saturate(1.4)",
@@ -42,10 +42,10 @@ export default function Header() {
           : "blur(20px) saturate(1.4)",
         borderBottom: ghost
           ? "none"
-          : "1px solid rgba(201,160,110,0.15)",
+          : "1px solid rgba(180,140,200,0.15)",
         boxShadow: ghost
           ? "none"
-          : "0 4px 32px rgba(0,0,0,0.35)",
+          : "0 4px 32px rgba(0,0,0,0.3)",
       }}
     >
       <div className="max-w-5xl mx-auto px-6 h-[var(--header-h)] flex items-center justify-between gap-8">
@@ -56,13 +56,12 @@ export default function Header() {
             <span
               className="text-2xl group-hover:opacity-75"
               style={{
-                transition: "color 400ms ease, text-shadow 400ms ease",
+                transition: "color 400ms ease",
                 fontFamily: "'Cormorant Garamond', serif",
                 fontStyle: "italic",
                 fontWeight: 600,
                 lineHeight: 1,
-                color: "var(--gold-lt)",
-                textShadow: "0 2px 16px rgba(18,13,31,0.85)",
+                color: "#fff",
               }}
             >
               Krasy Inspire
@@ -70,10 +69,9 @@ export default function Header() {
             <span
               className="text-[10px] tracking-[0.25em] uppercase font-semibold mt-1"
               style={{
-                transition: "color 400ms ease, text-shadow 400ms ease",
+                transition: "color 400ms ease",
                 lineHeight: 1,
-                color: "rgba(220,185,130,0.9)",
-                textShadow: "0 1px 8px rgba(18,13,31,0.7)",
+                color: "rgba(255,255,255,0.8)",
               }}
             >
               ✦ душа · дух · любов ✦
@@ -91,13 +89,12 @@ export default function Header() {
                 href={href}
                 className="relative pb-1"
                 style={{
-                  transition: "color 400ms ease, text-shadow 400ms ease, opacity 400ms ease",
+                  transition: "color 400ms ease, opacity 400ms ease",
                   fontSize: "0.75rem",
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  color: active ? "#e8c88a" : "rgba(255,255,255,0.85)",
-                  textShadow: "0 2px 12px rgba(18,13,31,0.6)",
+                  color: "#fff",
                   opacity: active ? 1 : 0.88,
                 }}
               >
@@ -105,7 +102,7 @@ export default function Header() {
                 {active && (
                   <span
                     className="absolute bottom-0 left-0 w-full h-px"
-                    style={{ background: "rgba(220,185,130,0.9)" }}
+                    style={{ background: "#fff" }}
                   />
                 )}
               </Link>

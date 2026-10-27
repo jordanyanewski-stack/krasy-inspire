@@ -3,18 +3,18 @@
 
 :root {
   --header-h:  72px;            /* fixed header height — single source of truth */
-  --blush:     #f7e8e8;
-  --rose:      #e8c4c4;
-  --lavender:  #e8e0f0;
-  --lilac:     #c9b8e8;
-  --sage:      #d4e8d8;
-  --mist:      #d8ecf0;
-  --gold:      #b8935a;      /* darkened for contrast */
-  --gold-lt:   #c9a96e;      /* lighter gold for decorative use */
-  --ink:       #2e2540;      /* darkened for readability */
-  --ink-mid:   #5a4d6e;      /* secondary text */
-  --ink-soft:  #8070a0;      /* tertiary / muted text */
-  --parchment: #fdf8f2;
+  --blush:     #fce4d0;         /* light peach (sunset orange wash) */
+  --rose:      #e8a09a;         /* sunset dusty rose */
+  --lavender:  #e2d0f0;         /* soft lavender wash */
+  --lilac:     #b48cc8;         /* sunset lavender-purple */
+  --sage:      #fae8b8;         /* soft marigold (sunset warm) */
+  --mist:      #f5d4b0;         /* warm amber haze */
+  --gold:      #b06825;         /* sunset amber (darkened for contrast) */
+  --gold-lt:   #d48830;         /* sunset amber lighter */
+  --ink:       #30202a;         /* warm dark */
+  --ink-mid:   #5c3d50;         /* warm mid */
+  --ink-soft:  #8a6878;         /* warm soft */
+  --parchment: #fef5eb;         /* warm cream */
 }
 
 @theme inline {

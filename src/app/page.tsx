@@ -100,9 +100,8 @@ export default async function Home() {
           <span
             className="tracking-[0.4em] text-[11px] uppercase font-semibold"
             style={{
-              color: "rgba(220,190,140,0.95)",
+              color: "rgba(255,255,255,0.9)",
               animation: "heroEntrance 0.8s 0.15s cubic-bezier(0.16,1,0.3,1) both",
-              textShadow: "0 0 20px rgba(201,160,100,0.5)",
             }}
           >
             <span className="sparkle">✦</span>&ensp;Добре дошла в твоето светилище&ensp;<span className="sparkle" style={{ animationDelay: "1s" }}>✦</span>
@@ -115,7 +114,6 @@ export default async function Home() {
               fontSize: "clamp(3rem, 7vw, 6rem)",
               lineHeight: 1.12,
               color: "#f5eef8",
-              textShadow: "0 2px 40px rgba(0,0,0,0.4)",
               animation: "heroEntrance 1s 0.3s cubic-bezier(0.16,1,0.3,1) both",
             }}
           >
@@ -123,7 +121,7 @@ export default async function Home() {
             <em
               style={{
                 fontStyle: "italic",
-                background: "linear-gradient(135deg, #d4a96e 0%, #e8c89a 50%, #b8935a 100%)",
+                background: "linear-gradient(135deg, #c9a0e8 0%, #e0c8f5 50%, #a878c0 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -138,7 +136,7 @@ export default async function Home() {
             style={{
               width: "120px",
               height: "1px",
-              background: "linear-gradient(to right, transparent, rgba(201,160,110,0.7), transparent)",
+              background: "linear-gradient(to right, transparent, rgba(200,180,240,0.7), transparent)",
               animation: "heroEntrance 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) both",
             }}
           />
@@ -148,7 +146,6 @@ export default async function Home() {
             style={{
               color: "rgba(255,248,240,1)",
               animation: "heroEntrance 0.9s 0.55s cubic-bezier(0.16,1,0.3,1) both",
-              textShadow: "0 2px 32px rgba(0,0,0,0.9), 0 1px 8px rgba(0,0,0,0.8)",
               fontWeight: 400,
               fontFamily: "'Lato', system-ui, sans-serif",
               fontStyle: "normal",
@@ -168,9 +165,9 @@ export default async function Home() {
               href="/journal"
               className="group relative overflow-hidden px-9 py-3.5 rounded-full text-[11px] tracking-widest uppercase font-semibold transition-all duration-400 hover:scale-105"
               style={{
-                background: "linear-gradient(135deg, rgba(201,160,110,0.95), rgba(184,147,90,0.9))",
+                background: "linear-gradient(135deg, #e07838, #c86020)",
                 color: "#fff",
-                boxShadow: "0 4px 24px rgba(201,160,110,0.4), 0 0 0 1px rgba(201,160,110,0.3)",
+                boxShadow: "0 4px 24px rgba(224,120,56,0.4)",
               }}
             >
               Прочети дневника
@@ -179,10 +176,10 @@ export default async function Home() {
               href="/about"
               className="px-9 py-3.5 rounded-full text-[11px] tracking-widest uppercase font-semibold transition-all duration-400 hover:scale-105"
               style={{
-                border: "1.5px solid rgba(230,215,245,0.5)",
-                color: "rgba(240,228,255,0.92)",
+                border: "1.5px solid rgba(255,255,255,0.5)",
+                color: "rgba(255,255,255,0.92)",
                 backdropFilter: "blur(8px)",
-                background: "rgba(255,255,255,0.06)",
+                background: "rgba(255,255,255,0.12)",
               }}
             >
               Моята история
